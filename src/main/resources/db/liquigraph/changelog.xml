@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<changelog xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+           xsi:noNamespaceSchemaLocation="http://www.liquigraph.org/schema/1.0/liquigraph.xsd">
+
+    <changeset id="will-it-blend" author="fbiville">
+        <query>CALL apoc.trigger.add('HAS_VALUE_ON_ADD_TO_INDEX', 'UNWIND {createdRelationships} AS r MATCH
+            (d:Decision)-[r:HAS_VALUE_ON]->(ch:Characteristic) CALL apoc.index.addRelationship(r, keys(r)) RETURN
+            count(*)', {phase:'after'});
+        </query>
+        <query>CALL apoc.trigger.add('HAS_VALUE_ON_REMOVE_FROM_INDEX', "UNWIND {deletedRelationships} AS r MATCH
+            (d:Decision)-[r:HAS_VALUE_ON]->(Characteristic) CALL apoc.index.removeRelationshipByName('HAS_VALUE_ON', r)
+            RETURN count(*)", {phase:'after'});
+        </query>
+    </changeset>
+</changelog>
